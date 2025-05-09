@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    networks:
+      - loan-net
+
+  api:
+    build: ./api
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    networks:
+      - loan-net
+
+  jmeter:
+    build: ./jmeter
+    depends_on:
+      - api
+    networks:
+      - loan-net
+
+networks:
+  loan-net:
