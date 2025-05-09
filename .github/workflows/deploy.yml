@@ -1,0 +1,27 @@
+name: Deploy Loan API
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build & Start Docker
+        run: docker-compose up -d --build
+
+      - name: Sleep before test
+        run: sleep 20
+
+      - name: Run JMeter Test
+        run: docker exec loan-app_jmeter_1 jmeter -n -t /test/test-plan.jmx -l /test/result.jtl
+
+      - name: Store test results
+        run: docker cp loan-app_jmeter_1:/test/result.jtl ./reports/result.jtl
+
+      - name: Stop Docker
+        run: docker-compose down
