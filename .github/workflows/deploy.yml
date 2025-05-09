@@ -15,7 +15,7 @@ jobs:
         run: docker-compose up -d --build
 
       - name: Sleep before test
-        run: sleep 20
+        run: sleep 90
 
       - name: Run JMeter Test
         run: docker exec loan-app_jmeter_1 jmeter -n -t /test/test-plan.jmx -l /test/result.jtl
